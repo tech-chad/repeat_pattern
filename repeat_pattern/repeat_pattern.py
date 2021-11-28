@@ -326,6 +326,7 @@ def play_the_game(game_display: Display,
 def main_game() -> None:
     pygame.init()
     win = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Repeat Pattern")
     game_level = Levels()
     game_sequence = GameSequence(game_level)
     game_display = Display(win, game_sequence, game_level)
