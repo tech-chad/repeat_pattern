@@ -212,6 +212,7 @@ def get_sequence_from_player(game_display: Display, seq: List[int]) -> str:
     game_display.display_game()
     pygame.time.wait(2000)
     game_display.set_display_text("GO")
+    pygame.time.set_timer(1, 3000)
     i = 0
     while i <= len(seq) - 1:
         clock.tick(10)
@@ -224,20 +225,45 @@ def get_sequence_from_player(game_display: Display, seq: List[int]) -> str:
                 clicked = game_display.get_clicked(mouse_x, mouse_y, True)
                 if clicked == seq[i]:
                     i += 1
+                    pygame.time.set_timer(1, 3000)
                 elif clicked == -1 or clicked == 0:
                     continue
                 else:
                     game_display.display_game()
                     pygame.time.wait(300)
                     game_display.reset_button_colors()
+                    pygame.time.set_timer(1, 0)
                     return "incorrect"
                 game_display.display_game()
                 pygame.time.wait(100)
             elif event.type == pygame.MOUSEBUTTONUP:
                 game_display.reset_button_colors()
+            elif event.type == 1:
+                game_display.reset_button_colors()
+                pygame.time.set_timer(1, 0)
+                return "incorrect"
     else:
         game_display.reset_button_colors()
+        pygame.time.set_timer(1, 0)
         return "correct"
+
+
+def game_over(game_display: Display) -> bool:
+    # False - quit, True - start_game
+    clock = pygame.time.Clock()
+    game_display.set_display_text("Game Over")
+    run = True
+    while run:
+        clock.tick(10)
+        game_display.display_game()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                clicked = game_display.get_clicked(mouse_x, mouse_y, False)
+                if clicked == BUTTON_START:
+                    return True
 
 
 def start_game(game_display: Display) -> bool:
@@ -276,8 +302,10 @@ def play_the_game(game_display: Display,
             if result == "quit":
                 run = False
             elif result == "incorrect":
-                print("incorrect")
-                run = False
+                if game_over(game_display):
+                    game_level.reset_level()
+                else:
+                    run = False
             elif result == "correct":
                 game_level.increment_level()
         else:
