@@ -15,7 +15,7 @@ BUTTON1 = 1
 BUTTON2 = 2
 BUTTON3 = 3
 BUTTON4 = 4
-BACKGROUND_COLOR = (20, 40, 40)
+BACKGROUND_COLOR = (40, 40, 40)
 COLORS_DICT = {
     "green": (0, 128, 0),
     "red": (128, 0, 0),
@@ -113,7 +113,9 @@ class Button:
     def display(self) -> None:
         pygame.draw.rect(self.win, self.color, self.button)
         text = self.font.render(self.text, True, COLORS_DICT["black"])
-        self.win.blit(text, (self.size[0] + 10, self.size[1] + 8))  # make better
+        tx = (self.size[0] + self.size[2] / 2) - text.get_width() / 2
+        ty = (self.size[1] + self.size[3] / 2) - text.get_height() / 2
+        self.win.blit(text, (tx, ty))  # make better
 
     def check_if_clicked(self, x: int, y: int, show_click: bool) -> bool:
         if self.button.collidepoint(x, y):
@@ -145,20 +147,20 @@ class Display:
         self.win = win
         self.game_sequence = game_seq
         self.game_level = game_level
-        self.font = pygame.font.SysFont("comicsans", 36)
+        self.font = pygame.font.SysFont("comicsans", 30)
         self.button_list = [
-            Button(win, "start", BUTTON_START, (200, 325, 80, 40),
+            Button(win, "start", BUTTON_START, (220, 325, 80, 40),
                    COLORS_DICT["white"], COLORS_DICT["white"], "Start", self.font),
-            Button(win, "button 1", BUTTON1, (100, 100, 100, 100),
+            Button(win, "button 1", BUTTON1, (50, 50, 150, 150),
                    COLORS_DICT["blue"], COLORS_DICT["bright blue"], "", self.font),
-            Button(win, "button 2", BUTTON2, (WIDTH - 200, 100, 100, 100),
+            Button(win, "button 2", BUTTON2, (WIDTH - 200, 50, 150, 150),
                    COLORS_DICT["green"], COLORS_DICT["bright green"], "", self.font),
-            Button(win, "button 3", BUTTON3, (WIDTH - 200, HEIGHT - 200, 100, 100),
+            Button(win, "button 3", BUTTON3, (WIDTH - 200, HEIGHT - 200, 150, 150),
                    COLORS_DICT["yellow"], COLORS_DICT["bright yellow"], "", self.font),
-            Button(win, "button 4", BUTTON4, (100, HEIGHT - 200, 100, 100),
+            Button(win, "button 4", BUTTON4, (50, HEIGHT - 200, 150, 150),
                    COLORS_DICT["red"], COLORS_DICT["bright red"], "", self.font)
         ]
-        self.text_display = pygame.rect.Rect((200, 220, 200, 65))
+        self.text_display = pygame.rect.Rect((220, 240, 160, 65))
         self.text_on_display = ""
 
     def display_game(self) -> None:
@@ -167,7 +169,9 @@ class Display:
             button.display()
         text = self.font.render(self.text_on_display, True, COLORS_DICT["black"])
         pygame.draw.rect(self.win, COLORS_DICT["grey"], self.text_display)
-        self.win.blit(text, (self.text_display.x + 20, self.text_display.y + 20))
+        ty = (self.text_display.y + self.text_display.height / 2) - text.get_height() / 2
+        tx = (self.text_display.x + self.text_display.width / 2) - text.get_width() / 2
+        self.win.blit(text, (tx, ty))
         pygame.display.update()
 
     def get_clicked(self, x: int, y: int, show_click: bool) -> int:
