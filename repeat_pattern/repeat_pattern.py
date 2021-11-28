@@ -29,6 +29,7 @@ COLORS_DICT = {
     "grey": (128, 128, 128),
     "black": (0, 0, 0),
 }
+CONGRATS_TEXT = ["Nice", "Good Job", "Great", "Good Work"]
 color_type = Tuple[int, int, int]
 
 
@@ -311,6 +312,9 @@ def play_the_game(game_display: Display,
                 else:
                     run = False
             elif result == "correct":
+                game_display.set_display_text(random.choice(CONGRATS_TEXT))
+                game_display.display_game()
+                pygame.time.wait(1100)
                 game_level.increment_level()
         else:
             run = False
