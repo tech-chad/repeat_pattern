@@ -217,6 +217,7 @@ def get_sequence_from_player(game_display: Display, seq: List[int]) -> str:
     game_display.display_game()
     pygame.time.wait(2000)
     game_display.set_display_text("GO")
+    pygame.event.clear()  # clear out unwanted mouse clicks
     pygame.time.set_timer(1, 3000)
     i = 0
     while i <= len(seq) - 1:
@@ -303,6 +304,7 @@ def play_the_game(game_display: Display,
         # display sequence
         if game_display.display_sequence(seq):
             # get the sequence from player
+            pygame.event.clear()  # clear out unwanted mouse clicks
             result = get_sequence_from_player(game_display, seq)
             if result == "quit":
                 run = False
